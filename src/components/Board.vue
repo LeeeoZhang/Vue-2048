@@ -76,14 +76,12 @@
         let newMatrix = JSON.parse(JSON.stringify(this.matrix))
         let len = newMatrix.length
         for(let row = 0; row < len - 1; row++) {
-          for (let col = 0; col < len - 1; col++) {
+          for (let col = 0; col < len; col++) {
             if(newMatrix[row][col] > 0 && newMatrix[row][col] === newMatrix[row + 1][col]) {
-              console.log(newMatrix[row])
               newMatrix[row + 1][col] *= 2
               newMatrix[row][col] = 0
               this.$store.commit('addScore',{score: newMatrix[row + 1][col]})
             } else if (newMatrix[row][col] > 0 && newMatrix[row + 1][col] === 0)  {
-              console.log(newMatrix[row])
               newMatrix[row + 1][col] = newMatrix[row][col]
               newMatrix[row][col] = 0
             }
@@ -167,7 +165,7 @@
     width: 503px;
     height: 503px;
     box-sizing: border-box;
-    margin: 50px auto 10px auto;
+    margin: 10px auto 10px auto;
     border-collapse: separate;
     border-spacing: 10px;
     text-align: center;

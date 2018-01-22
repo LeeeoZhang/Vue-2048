@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <!-- <h1>2048 Game In Vue.js</h1> -->
+    <h1>2048 Game In Vue.js</h1>
     <router-view/>
     <p class="score">Score: {{score}}</p>
   </div>
@@ -34,10 +34,13 @@ ul,ol {
 a {
   text-decoration: none;
 }
-.score {
+.score,h1 {
   width: 503px;
   margin: 0 auto;
   font-size: 30px;
   font-weight: bold;
+}
+h1 {
+  margin: 20px auto 10px auto;
 }
 </style>

@@ -1,38 +1,6 @@
 <template>
-  <table class="board" @keydown.up="onKeyUp" @keydown.down="onKeyDown" @keydown.left="onKeyLeft" @keydown.right="onKeyRight">
-    <tr class="row1">
-      <td class="cell1">
-        <div v-show="matrix[0][0] !== 0">{{matrix[0][0]}}</div>
-      </td>
-      <td class="cell2">
-        <div v-show="matrix[0][1] !== 0">{{matrix[0][1]}}</div>
-      </td>
-      <td class="cell3">
-        <div v-show="matrix[0][2] !== 0">{{matrix[0][2]}}</div>
-      </td>
-    </tr>
-    <tr class="row2">
-      <td class="cell4">
-        <div v-show="matrix[1][0] !== 0">{{matrix[1][0]}}</div>
-      </td>
-      <td class="cell5">
-        <div v-show="matrix[1][1] !== 0">{{matrix[1][1]}}</div>
-      </td>
-      <td class="cell6">
-        <div v-show="matrix[1][2] !== 0">{{matrix[1][2]}}</div>
-      </td>
-    </tr>
-    <tr class="row3">
-      <td class="cell7">
-        <div v-show="matrix[2][0] !== 0">{{matrix[2][0]}}</div>
-      </td>
-      <td class="cell8">
-        <div v-show="matrix[2][1] !== 0">{{matrix[2][1]}}</div>
-      </td>
-      <td class="cell9">
-        <div v-show="matrix[2][2] !== 0">{{matrix[2][2]}}</div>
-      </td>
-    </tr>
+  <table class="board">
+    <Row v-for="(item,index) in matrix" :key="index" :row="index"></Row>
   </table>
 </template>
 
@@ -54,32 +22,116 @@
       onKeyUp () {
         if(this.lock) return
         this.lock = true
-        console.log('上')
         this.combineNumToTop()
       },
       onKeyDown () {
-        console.log('下')
+        if(this.lock) return
+        this.lock = true
+        this.combineNumToBottom()
       },
       onKeyLeft () {
-        console.log('左')
+        if(this.lock) return
+        this.lock = true
+        this.combineNumToLeft()
       },
       onKeyRight () {
-        console.log('右')
+        if(this.lock) return
+        this.lock = true
+        this.combineNumToRight()
       },
+      //向上合并
       combineNumToTop () {
+        let newMatrix = JSON.parse(JSON.stringify(this.matrix))
+        let len = newMatrix.length
+        for(let row = len - 1; row > 0; row--) {
+          for (let col = 0; col < len; col++) {
+            if(newMatrix[row][col] !== 0 && newMatrix[row][col] === (newMatrix[row - 1] ? newMatrix[row - 1][col]:false)) {
+              newMatrix[row - 1][col] *= 2
+              newMatrix[row][col] = 0
+            } else if (newMatrix[row][col] !== 0 && (newMatrix[row - 1] ? newMatrix[row - 1][col]:false) === 0 ) {
+              newMatrix[row - 1][col] = newMatrix[row][col]
+              newMatrix[row][col] = 0
+            }
+          }
+        }
+        this.addRandomNum(newMatrix)
+      },
+      //向下合并
+      combineNumToBottom () {
         let newMatrix = JSON.parse(JSON.stringify(this.matrix))
         let len = newMatrix.length
         for(let row = 0; row < len; row++) {
           for (let col = 0; col < len; col++) {
-            if(newMatrix[row][col] !== 0 && newMatrix[row][col] === (newMatrix[row + 1] ? newMatrix[row + 1][col]:newMatrix[len - 1][col])) {
-              newMatrix[row][col] *= 2
-              newMatrix[row + 1] ? newMatrix[row + 1][col] = 0 : newMatrix[len - 1][col] = 0
-            } else if (newMatrix[row][col] === 0 && (newMatrix[row + 1] ? newMatrix[row + 1][col]:newMatrix[len - 1][col]) !== 0) {
-              newMatrix[row][col] = newMatrix[row + 1][col]
-              newMatrix[row + 1] ? newMatrix[row + 1][col] = 0 : newMatrix[len - 1][col] = 0
+            if(newMatrix[row][col] !== 0 && newMatrix[row][col] === (newMatrix[row + 1] ? newMatrix[row + 1][col]:false)) {
+              newMatrix[row + 1][col] *= 2
+              newMatrix[row][col] = 0
+            } else if (newMatrix[row][col] !== 0 && (newMatrix[row + 1] ? newMatrix[row + 1][col]:false) === 0) {
+              newMatrix[row + 1][col] = newMatrix[row][col]
+              newMatrix[row][col] = 0
             }
           }
         }
+        this.addRandomNum(newMatrix)
+      },
+      //向左合并
+      combineNumToLeft () {
+        let newMatrix = JSON.parse(JSON.stringify(this.matrix))
+        let len = newMatrix.length
+        for(let col = len - 1; col > 0; col--) {
+          for (let row = 0; row < len; row++) {
+            if(newMatrix[row][col] !== 0 && newMatrix[row][col] === (newMatrix[col - 1] ? newMatrix[row][col - 1]:false)) {
+              newMatrix[row][col - 1] *= 2
+              newMatrix[row][col] = 0
+            } else if (newMatrix[row][col] !== 0 && (newMatrix[col - 1] ? newMatrix[row][col - 1]:false) === 0 ) {
+              newMatrix[row][col - 1] = newMatrix[row][col]
+              newMatrix[row][col] = 0
+            }
+          }
+        }
+        this.addRandomNum(newMatrix)
+      },
+      //向右合并
+      combineNumToRight () {
+        let newMatrix = JSON.parse(JSON.stringify(this.matrix))
+        let len = newMatrix.length
+        for(let col = 0; col < len; col++) {
+          for (let row = 0; row < len; row++) {
+            if(newMatrix[row][col] !== 0 && newMatrix[row][col] === (newMatrix[col + 1] ? newMatrix[row][col + 1]:false)) {
+              newMatrix[row][col + 1] *= 2
+              newMatrix[row][col] = 0
+            } else if (newMatrix[row][col] !== 0 && (newMatrix[col + 1] ? newMatrix[row][col + 1]:false) === 0) {
+              newMatrix[row][col + 1] = newMatrix[row][col]
+              newMatrix[row][col] = 0
+            }
+          }
+        }
+        this.addRandomNum(newMatrix)
+      },
+      //获取一个随机数
+      getRandomNum (arr) {
+        return Math.floor(Math.random()*arr.length)
+      },
+      //获取为0格子的坐标
+      getEmptyCell (newMatrix) {
+        let emptyCells = []
+        for(let i = 0; i<newMatrix.length;i++) {
+          for(let j = 0; j<newMatrix[i].length;j++) {
+            let value = newMatrix[i][j]
+            if(value === 0) {
+              emptyCells.push([i,j])
+            }
+          }
+        }
+        return emptyCells
+      },
+      //在为0格子添加随机数字
+      addRandomNum (newMatrix) {
+        let emptyCells = this.getEmptyCell(newMatrix)
+        if(emptyCells.length === 0) return
+        let randomCell = this.getRandomNum(emptyCells)
+        let randomNum = this.getRandomNum([2,4])
+        console.log(randomNum)
+        newMatrix[emptyCells[randomCell][0]][emptyCells[randomCell][1]] = [2,4][randomNum]
         this.$store.commit('changeMatrix',{newMatrix})
         this.lock = false
       },
@@ -101,7 +153,7 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
+<style lang="scss">
   .board {
     width: 503px;
     height: 503px;
@@ -113,8 +165,8 @@
     font-size: 50px;
     td {
       padding: 0;
-      height: 33.33%;
-      width: 33.33%;
+      height: 25%;
+      width: 25%;
       border: 1px solid black;
       background: orange;
       border-radius: 5px;

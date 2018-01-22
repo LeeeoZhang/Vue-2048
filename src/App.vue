@@ -11,7 +11,17 @@ export default {
 </script>
 
 <style>
-* {margin: 0; padding: 0;}
-ul,ol {list-style: none;}
-a {text-decoration: none;}
+html,body {
+  background: #FFCC33;
+}
+* {
+  margin: 0; 
+  padding: 0;
+}
+ul,ol {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
 </style>

@@ -18,8 +18,19 @@
         lock: false,
       }
     },
-    created  () {
-      this.addRandomNum()
+    created(){
+      document.body.addEventListener('keydown',(event)=>{
+        switch(event.keyCode){
+          case 37: this.onKeyLeft(); break
+          case 38: this.onKeyUp(); break
+          case 39: this.onKeyRight(); break
+          case 40: this.onKeyDown(); break
+        }
+      })
+    },
+    mounted  () {
+      let newMatrix = JSON.parse(JSON.stringify(this.matrix))
+      this.addRandomNum(newMatrix)
     },
     methods :{
       onKeyUp () {
@@ -51,6 +62,7 @@
             if(newMatrix[row][col] > 0 && newMatrix[row][col] === newMatrix[row - 1][col] ) {
               newMatrix[row - 1][col] *= 2
               newMatrix[row][col] = 0
+              this.$store.commit('addScore',{score: newMatrix[row - 1][col]})
             } else if (newMatrix[row][col] > 0 && newMatrix[row - 1][col] === 0 ) {
               newMatrix[row - 1][col] = newMatrix[row][col]
               newMatrix[row][col] = 0
@@ -69,6 +81,7 @@
               console.log(newMatrix[row])
               newMatrix[row + 1][col] *= 2
               newMatrix[row][col] = 0
+              this.$store.commit('addScore',{score: newMatrix[row + 1][col]})
             } else if (newMatrix[row][col] > 0 && newMatrix[row + 1][col] === 0)  {
               console.log(newMatrix[row])
               newMatrix[row + 1][col] = newMatrix[row][col]
@@ -87,6 +100,7 @@
             if(newMatrix[row][col] > 0 && newMatrix[row][col] === newMatrix[row][col - 1]) {
               newMatrix[row][col - 1] *= 2
               newMatrix[row][col] = 0
+              this.$store.commit('addScore',{score: newMatrix[row][col - 1]})
             } else if (newMatrix[row][col] > 0 && newMatrix[row][col - 1] === 0) {
               newMatrix[row][col - 1] = newMatrix[row][col]
               newMatrix[row][col] = 0
@@ -104,6 +118,7 @@
             if(newMatrix[row][col] > 0 && newMatrix[row][col] === newMatrix[row][col + 1]) {
               newMatrix[row][col + 1] *= 2
               newMatrix[row][col] = 0
+              this.$store.commit('addScore',{score: newMatrix[row][col + 1]})
             } else if (newMatrix[row][col] > 0 && newMatrix[row][col + 1] === 0) {
               newMatrix[row][col + 1] = newMatrix[row][col]
               newMatrix[row][col] = 0
@@ -140,16 +155,6 @@
         this.lock = false
       },
     },
-    created(){
-      document.body.addEventListener('keydown',(event)=>{
-        switch(event.keyCode){
-          case 37: this.onKeyLeft(); break
-          case 38: this.onKeyUp(); break
-          case 39: this.onKeyRight(); break
-          case 40: this.onKeyDown(); break
-        }
-      })
-    },
     computed: mapState({
       matrix: 'matrix',
     }),
@@ -162,7 +167,7 @@
     width: 503px;
     height: 503px;
     box-sizing: border-box;
-    margin: 50px auto;
+    margin: 50px auto 10px auto;
     border-collapse: separate;
     border-spacing: 10px;
     text-align: center;

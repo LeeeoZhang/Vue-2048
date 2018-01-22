@@ -14,7 +14,7 @@
     },
     computed: mapState({
       matrix: 'matrix',
-    })
+    }),
   }
 </script>
 

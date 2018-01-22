@@ -18,6 +18,9 @@
         lock: false,
       }
     },
+    created  () {
+      this.addRandomNum()
+    },
     methods :{
       onKeyUp () {
         if(this.lock) return
@@ -45,10 +48,10 @@
         let len = newMatrix.length
         for(let row = len - 1; row > 0; row--) {
           for (let col = 0; col < len; col++) {
-            if(newMatrix[row][col] !== 0 && newMatrix[row][col] === (newMatrix[row - 1] ? newMatrix[row - 1][col]:false)) {
+            if(newMatrix[row][col] > 0 && newMatrix[row][col] === newMatrix[row - 1][col] ) {
               newMatrix[row - 1][col] *= 2
               newMatrix[row][col] = 0
-            } else if (newMatrix[row][col] !== 0 && (newMatrix[row - 1] ? newMatrix[row - 1][col]:false) === 0 ) {
+            } else if (newMatrix[row][col] > 0 && newMatrix[row - 1][col] === 0 ) {
               newMatrix[row - 1][col] = newMatrix[row][col]
               newMatrix[row][col] = 0
             }
@@ -60,12 +63,14 @@
       combineNumToBottom () {
         let newMatrix = JSON.parse(JSON.stringify(this.matrix))
         let len = newMatrix.length
-        for(let row = 0; row < len; row++) {
-          for (let col = 0; col < len; col++) {
-            if(newMatrix[row][col] !== 0 && newMatrix[row][col] === (newMatrix[row + 1] ? newMatrix[row + 1][col]:false)) {
+        for(let row = 0; row < len - 1; row++) {
+          for (let col = 0; col < len - 1; col++) {
+            if(newMatrix[row][col] > 0 && newMatrix[row][col] === newMatrix[row + 1][col]) {
+              console.log(newMatrix[row])
               newMatrix[row + 1][col] *= 2
               newMatrix[row][col] = 0
-            } else if (newMatrix[row][col] !== 0 && (newMatrix[row + 1] ? newMatrix[row + 1][col]:false) === 0) {
+            } else if (newMatrix[row][col] > 0 && newMatrix[row + 1][col] === 0)  {
+              console.log(newMatrix[row])
               newMatrix[row + 1][col] = newMatrix[row][col]
               newMatrix[row][col] = 0
             }
@@ -78,13 +83,13 @@
         let newMatrix = JSON.parse(JSON.stringify(this.matrix))
         let len = newMatrix.length
         for(let row = 0; row < len; row++) {
-          for (let col = 0; col < len; col++) {
-            if(newMatrix[row][col] > 0 && newMatrix[row][col] === newMatrix[row][col + 1]) {
-              newMatrix[row][col] *= 2
-              newMatrix[row][col + 1] = 0
-            } else if (newMatrix[row][col] === 0 && newMatrix[row][col + 1] > 0) {
-              newMatrix[row][col] = newMatrix[row][col + 1]
-              newMatrix[row][col + 1] = 0
+          for (let col = len; col > 0; col--) {
+            if(newMatrix[row][col] > 0 && newMatrix[row][col] === newMatrix[row][col - 1]) {
+              newMatrix[row][col - 1] *= 2
+              newMatrix[row][col] = 0
+            } else if (newMatrix[row][col] > 0 && newMatrix[row][col - 1] === 0) {
+              newMatrix[row][col - 1] = newMatrix[row][col]
+              newMatrix[row][col] = 0
             }
           }
         }
@@ -95,13 +100,13 @@
         let newMatrix = JSON.parse(JSON.stringify(this.matrix))
         let len = newMatrix.length
         for(let row = 0; row < len; row++) {
-          for (let col = len - 1; col > 0; col--) {
-            if(newMatrix[row][col] > 0 && newMatrix[row][col] === newMatrix[row][col - 1]) {
-              newMatrix[row][col] *= 2
-              newMatrix[row][col - 1] = 0
-            } else if (newMatrix[row][col] === 0 && newMatrix[row][col - 1] > 0) {
-              newMatrix[row][col] = newMatrix[row][col - 1]
-              newMatrix[row][col - 1] = 0
+          for (let col = 0; col < len; col++) {
+            if(newMatrix[row][col] > 0 && newMatrix[row][col] === newMatrix[row][col + 1]) {
+              newMatrix[row][col + 1] *= 2
+              newMatrix[row][col] = 0
+            } else if (newMatrix[row][col] > 0 && newMatrix[row][col + 1] === 0) {
+              newMatrix[row][col + 1] = newMatrix[row][col]
+              newMatrix[row][col] = 0
             }
           }
         }

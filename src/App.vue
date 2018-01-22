@@ -12,7 +12,7 @@ export default {
 
 <style>
 html,body {
-  background: #FFCC33;
+  background: #faf8f0;
 }
 * {
   margin: 0; 

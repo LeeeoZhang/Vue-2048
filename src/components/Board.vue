@@ -77,14 +77,14 @@
       combineNumToLeft () {
         let newMatrix = JSON.parse(JSON.stringify(this.matrix))
         let len = newMatrix.length
-        for(let col = len - 1; col > 0; col--) {
-          for (let row = 0; row < len; row++) {
-            if(newMatrix[row][col] !== 0 && newMatrix[row][col] === (newMatrix[col - 1] ? newMatrix[row][col - 1]:false)) {
-              newMatrix[row][col - 1] *= 2
-              newMatrix[row][col] = 0
-            } else if (newMatrix[row][col] !== 0 && (newMatrix[col - 1] ? newMatrix[row][col - 1]:false) === 0 ) {
-              newMatrix[row][col - 1] = newMatrix[row][col]
-              newMatrix[row][col] = 0
+        for(let row = 0; row < len; row++) {
+          for (let col = 0; col < len; col++) {
+            if(newMatrix[row][col] > 0 && newMatrix[row][col] === newMatrix[row][col + 1]) {
+              newMatrix[row][col] *= 2
+              newMatrix[row][col + 1] = 0
+            } else if (newMatrix[row][col] === 0 && newMatrix[row][col + 1] > 0) {
+              newMatrix[row][col] = newMatrix[row][col + 1]
+              newMatrix[row][col + 1] = 0
             }
           }
         }
@@ -94,14 +94,14 @@
       combineNumToRight () {
         let newMatrix = JSON.parse(JSON.stringify(this.matrix))
         let len = newMatrix.length
-        for(let col = 0; col < len; col++) {
-          for (let row = 0; row < len; row++) {
-            if(newMatrix[row][col] !== 0 && newMatrix[row][col] === (newMatrix[col + 1] ? newMatrix[row][col + 1]:false)) {
-              newMatrix[row][col + 1] *= 2
-              newMatrix[row][col] = 0
-            } else if (newMatrix[row][col] !== 0 && (newMatrix[col + 1] ? newMatrix[row][col + 1]:false) === 0) {
-              newMatrix[row][col + 1] = newMatrix[row][col]
-              newMatrix[row][col] = 0
+        for(let row = 0; row < len; row++) {
+          for (let col = len - 1; col > 0; col--) {
+            if(newMatrix[row][col] > 0 && newMatrix[row][col] === newMatrix[row][col - 1]) {
+              newMatrix[row][col] *= 2
+              newMatrix[row][col - 1] = 0
+            } else if (newMatrix[row][col] === 0 && newMatrix[row][col - 1] > 0) {
+              newMatrix[row][col] = newMatrix[row][col - 1]
+              newMatrix[row][col - 1] = 0
             }
           }
         }
@@ -130,7 +130,6 @@
         if(emptyCells.length === 0) return
         let randomCell = this.getRandomNum(emptyCells)
         let randomNum = this.getRandomNum([2,4])
-        console.log(randomNum)
         newMatrix[emptyCells[randomCell][0]][emptyCells[randomCell][1]] = [2,4][randomNum]
         this.$store.commit('changeMatrix',{newMatrix})
         this.lock = false
@@ -160,15 +159,18 @@
     box-sizing: border-box;
     margin: 50px auto;
     border-collapse: separate;
+    border-spacing: 10px;
     text-align: center;
     font-weight: bold;
     font-size: 50px;
+    color: #fff;
+    background: #b9ada1;
+    border-radius: 5px; 
     td {
       padding: 0;
       height: 25%;
       width: 25%;
-      border: 1px solid black;
-      background: orange;
+      background: #cac0b5;
       border-radius: 5px;
     }
   }
